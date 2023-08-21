@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<h3 style="margin-top: 0.9em;">Medappl.com - Aplikácia na online testovanie a efektívnu prípravu na prijímacie skúšky na medicínu LFUK Bratislava</h3>	  
+<h5 class="">Prihlásenie do Vášho účtu</h5>
+	<form action="{% url 'login' %}" method="POST" class="">
+		{% csrf_token %}
+		<div class="form-group">
+			<input class="form-control" type="text" id="id_username" name="username" required autofocus placeholder="užívateľské meno">
+		</div>
+		<div class="form-group">
+			<input class="form-control" type="password" id="id_password" name="password" required placeholder="heslo">
+		</div>
+				
+		{% if form.errors %}
+			<p class="text-danger">Užívateľské meno alebo Heslo nie je správne.</p>
+		{% endif %}
+
+			<button type="submit" class="btn btn-primary">Prihlásiť</button>
+		</form>
+        <div class='cta-buttons'>
+            <a class='btn btn-outline-dark btn-sm' href='{% url 'password_reset' %}'>Zabudnuté heslo?</a>
+<h6 style="margin-top: 0.9em;">Ak chcete aplikáciu používať ďalší rok, treba sa znovu registrovať. K registrácii možno použiť aj predošlé prihlasovacie údaje.</h6>
+{% endblock %}

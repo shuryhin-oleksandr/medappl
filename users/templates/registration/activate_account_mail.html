@@ -1,0 +1,13 @@
+{% autoescape off %}
+<h3>
+    Ahoj {{ user.get_username }},
+</h3>
+
+Pre aktiváciu Vášho nového účtu na stránke {{ domain }},
+kliknite na odkaz nižšie:
+<br><br>
+<a href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Aktivovať účet</a>
+<br><br>
+Ak uvedený odkaz nieje funkčný, skopírujte ho do nového okna internetového prehliadača.
+
+{% endautoescape %}

@@ -1,0 +1,39 @@
+.border, .table td {
+    border-color: black !important;
+    border-width: 2px !important;
+}
+
+.table td {
+    border: none;
+}
+
+[contenteditable] {
+    outline: 0px solid transparent;
+}
+
+#messages {
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+}
+
+.ex-panel-1 {
+    display: block;
+}
+
+.ex-panel-2 {
+    display: none;
+}
+
+@media screen and (min-width: 800px) {
+    .ex-panel-1 {
+        display: none;
+    }
+    
+    .ex-panel-2 {
+        display: block;
+    }
+}

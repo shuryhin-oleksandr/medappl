@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+<div class="d-flex flex-row">
+    <div class="timer-counter" id="left-panel">
+        <div style="padding: 10px; text-align: center;">
+            {% if quiz_type == "saved" %}
+                <p>{{ subject|truncatechars:10 }} Mode {{ mode }}</span></p>
+            {% elif quiz_type == "general" %}
+                <p class="d-none">Mode: <span id="quiz-mode">{{ mode }}</span></p>
+                <p class="d-none">Subject: <span id="quiz-subject">{{ subject|truncatechars:10 }}</span></p>
+                <p>{{ subject_display_name }} Mód {{ mode }}</span></p>
+                <p>Language: <span id="quiz-language" data-language="{{ language }}">{{ language_display_name }}</span></p>
+            {% elif quiz_type == "repeat" %}
+                <p class="d-none">Mode: <span id="quiz-mode">{{ mode }}</span></p>
+                <p class="d-none">Subject: <span id="quiz-subject">{{ subject|truncatechars:10 }}</span></p>
+                <p>{{ subject_display_name }} Mód {{ mode }}</span></p>
+                <p>Language: <span id="quiz-language" data-language="{{ language }}">{{ language_display_name }}</span></p>
+            {% endif %}
+        </div>
+        <div class="timer-container">
+            <span class="fa fa-clock-o"></span>
+            <span id="hours">1</span>
+            <span id="minutes">30</span>
+            <span id="seconds">00</span>
+        </div>
+        <div class="counter-container">
+            <span class="fa fa-checklist"></span>
+            <p id="counter">
+                Počet
+                otázok
+                <span id="count">0</span>
+                /
+                <span id="total">0</span>
+            </p>
+        </div>
+    </div>
+    <div class="" id="right-panel">        
+        <div class="d-flex justify-content-end mb-3">
+            <div id="prompt"></div>
+        </div>
+        <form class="container">
+            <div class="w-100 d-flex flex-column justify-content-center align-items-center">
+                <button style="max-width: 500px;" class="btn btn-sm btn-dark w-100 rounded-0" id="ready-button">Loading</button>
+                <div style="max-width: 500px;" class="progress w-100 rounded-0">
+                    <div class="progress-bar bg-primary" id="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="score-modal" tabindex="-1" role="dialog" aria-labelledby="score-modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Vaše bodové skóre:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'utils.js' %}"></script>
+
+<script>
+    document.getElementById("navbar").remove();
+    document.getElementById("navbar-margin").remove();
+    document.body.classList.remove("container");
+</script>
+
+<script>
+    let language = "{{ language }}";
+    let mode = "{{ mode }}";
+    let subject = '{{ subject }}';
+    let voiceRecognition = "{{ voice_recognition }}";
+    voiceRecognition = voiceRecognition === "True" ? true : false;
+    let questions = formatDataString("{{ questions }}");
+    let usedOptions = formatOptionsString("{{ used_options }}");
+    let negativeMarking = "{{ negative_marking }}" == '1';
+    let start_number = '{{ start }}';
+    let repeatQuizSlug = "{{ repeat_quiz_slug }}";
+    let subjectDisplayName = '{{ subject_display_name }}';
+    let languageDisplayName = '{{ language_display_name }}';
+    let quizType = "{{ quiz_type }}";
+    let premiumUser = "{{ request.user.subscription.subscription.is_premium }}" == "True";
+
+    console.log("USER CONFIGURATION");
+    console.log("PREMIUM USER: ", premiumUser);
+    console.log("QUIZ CONFIGURATION");
+    console.log("LANGUAGE: ", language);
+    console.log("MODE: ", mode);
+    console.log("SUBJECT: ", subject);
+    console.log("VOICE RECOGNITION: ", voiceRecognition);
+    console.log("NEGATIVE MARKING: ", negativeMarking);
+    console.log("START NUMBER: ", start_number);
+    console.log("QUIZ TYPE: ", quizType);
+    console.log("LOADED QUESTIONS: ", questions);
+    console.log("LOADED OPTIONS: ", usedOptions);
+</script>
+
+{% if quiz_type == "general" %}
+    <script>
+        
+    </script>    
+{% elif quiz_type == "custom" %}
+    <script>
+        
+    </script>
+{% elif quiz_type == "repeat" %}
+    <script>
+        
+    </script>
+{% endif %}
+<script>
+    let quizDetails = {
+        voice_recognition: voiceRecognition,
+        negative_marking: negativeMarking,
+        mode,
+        subject,
+        quizType,
+        language,
+        repeat_quiz_slug: repeatQuizSlug,
+        parent_slug: "{{ parent_slug }}"
+    };
+</script>
+
+<script src="{% static 'quiz.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Medappl.com - výber módu{% endblock %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+<!-- CUSTOM ANSWER KEY FORM -->
+
+<section id="custom-answer-key" class="card mt-4 mb-4">
+    <div class="card-header">
+        <h3>Custom Answer Key</h3>
+        <p>Upload your own answer keys for existing questions and test your skills!</p>
+    </div>
+    <div class="card-body">
+        <form action="" method="POST" class="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row mb-3">
+                <div class="form-group col-md-4">
+                    <label for="language" class="form-label">Language</label>
+                    <select class="custom-select" name="language" id="language">
+                        <option selected value="slovak1">Slovak 1</option>
+                        <option value="slovak2">Slovak 2</option>
+                        <option value="czech2">Czech 1</option>
+                        <option value="czech2">Czech 2</option>
+                        <option value="english1">English 1</option>
+                        <option value="english2">English 2</option>
+                        <option value="no-audio">No Audio</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="start" class="form-label">Start</label>
+                    <input type="number" min="1" name="start" id="start"
+                        class="form-control {% if 'start' in cakForm.errors %} is-invalid {% endif %}">
+                    <small id="start" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                    <div class="invalid-feedback">
+                        {{ cakForm.errors.start|striptags }}
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="voiceRecognition" class="form-label">Voice Recognition</label>
+                    <select class="custom-select" name="voiceRecognition" id="voice-recognition-selector-2">
+                        <option selected value="1">Enable</option>
+                        <option value="0">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="subject" class="form-label">Subject</label>
+                    <select class="custom-select" name="subject" id="subject-selector-2">
+                        <option selected value="biology">Biology</option>
+                        <option value="chemistry">Chemistry</option>
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="form-label" for="answers">Answers</label>
+                    <input type="file" name="answers"
+                        class="form-control {% if 'answers' in cakForm.errors %} is-invalid {% endif %}" id="answers"
+                        aria-describedby="answers" accept=".txt">
+                    <div class="invalid-feedback">
+                        {{ cakForm.errors.answers|striptags }}
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group w-100" id="biology-buttons-2">
+                <button type="submit" name="mode" class="btn btn-dark" value="cakb1">Biology Mode 1</button>
+                <button type="submit" name="mode" class="btn btn-secondary" value="cakb2">Biology Mode 2</button>
+
+                {% if request.user.subscription.subscription.is_premium %}
+                <button type="submit" name="mode" class="btn btn-dark" value="cakb3">Biology Mode 3</button>
+                <button type="submit" name="mode" class="btn btn-secondary" value="cakb4">Biology Mode 4</button>
+                {% endif %}
+
+            </div>
+            <div class="btn-group w-100 hide" id="chemistry-buttons-2">
+                <button type="submit" name="mode" class="btn btn-dark" value="cakc1">Chemistry Mode 1</button>
+                <button type="submit" name="mode" class="btn btn-secondary" value="cakc2">Chemistry Mode 2</button>
+
+                {% if request.user.subscription.subscription.is_premium %}
+                <button type="submit" name="mode" class="btn btn-dark" value="cakc3">Chemistry Mode 3</button>
+                <button type="submit" name="mode" class="btn btn-secondary" value="cakc4">Chemistry Mode 4</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- CUSTOM QUIZ CREATOR -->
+
+<section class="card mt-4 mb-4" id="custom-quiz-creator">
+    <div class="card-header">
+        <h3>Custom Quiz Creator</h3>
+        <p>Upload your own questions and answer keys.</p>
+    </div>
+    <div class="card-body">
+        <form action="." method="POST" class="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row mb-3">
+                <div class="form-group col-md-4">
+                    <label for="number_of_questions" class="form-label">Number of Questions</label>
+                    <input type="number" min="1" max="1500" name="number_of_questions" id="number_of_questions" value="1500"
+                        class="form-control {% if 'number_of_questions' in form.errors %} is-invalid {% endif %}">
+                    <div class="invalid-feedback">
+                        Number of questions should be between 1 and 1500.
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="options_per_questions" class="form-label">Number of Answers per Question</label>
+                    <input type="number" min="1" max="8" name="options_per_questions" id="options_per_questions" value="8"
+                        class="form-control {% if 'options_per_questions' in form.errors %} is-invalid {% endif %}">
+                    <div class="invalid-feedback">
+                        Number of answer per question should be between 1 and 8.
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="start" class="form-label">Start</label>
+                    <input type="number" min="1" name="start" id="start" class="form-control {% if 'start' in form.errors %} is-invalid {% endif %}">
+                    <small id="start" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                    <div class="invalid-feedback">
+                        {{ form.errors.start|striptags }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row mb-3">
+                <div class="form-group col-md-4">
+                    <label for="language" class="form-label">Language</label>
+                    <select class="custom-select" name="language" id="language">
+                        <option selected value="slovak1">Slovak 1</option>
+                        <option value="slovak2">Slovak 2</option>
+                        <option value="czech2">Czech 1</option>
+                        <option value="czech2">Czech 2</option>
+                        <option value="english1">English 1</option>
+                        <option value="english2">English 2</option>
+                        <option value="no-audio">No Audio</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="negativeMarking" class="form-label">Negative Marking</label>
+                    <select class="custom-select" name="negativeMarking" id="negativeMarking">
+                        <option selected value="1">Yes</option>
+                        <option value="0">Nope</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="voiceRecognition" class="form-label">Voice Recognition</label>
+                    <select class="custom-select" name="voiceRecognition" id="voice-recognition-selector-3">
+                        <option selected value="1">Enable</option>
+                        <option value="0">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row mb-3">
+                <div class="col-md-6 form-group">
+                    <label class="form-label" for="questions">Questions</label>
+                    <input type="file" name="questions"
+                        class="form-control {% if 'questions' in form.errors %} is-invalid {% endif %}" id="que stions"
+                        aria-describedby="questions" accept=".txt">
+                    <div class="invalid-feedback">
+                        {{ form.errors.question|striptags }}
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="form-label" for="answers">Answers</label>
+                    <input type="file" name="answers"
+                        class="form-control {% if 'answers' in form.errors %} is-invalid {% endif %}" id="answers"
+                        aria-describedby="answers" accept=".txt">
+                    <div class="invalid-feedback">
+                        {{ form.errors.answers|striptags }}
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group w-100">
+                <button type="submit" name="mode" class="btn btn-dark" value="cq1">Custom Mode 1</button>
+                <button type="submit" name="mode" class="btn btn-secondary" value="cq2">Custom Mode 2</button>
+
+                {% if request.user.subscription.subscription.is_premium %}
+                <button type="submit" name="mode" class="btn btn-dark" value="cq3">Custom Mode 3</button>
+                <button type="submit" name="mode" class="btn btn-secondary" value="cq4">Custom Mode 4</button>
+                {% endif %}
+
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- REPEAT QUIZZES -->
+
+<section class="card mt-4 mb-4" id="repeat-quizzes">
+    {% csrf_token %}
+    <div class="card-header">
+        <h3>Repeat Quizzes</h3>
+        <p>Following are your repeat quizzes</p>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover table-bordered" id="repeat-quizzes-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-nowrap">#</th>
+                    <th scope="col" class="text-nowrap">Name</th>
+                    <th scope="col" class="text-nowrap">Number of Questions</th>
+                    <th scope="col" class="text-nowrap">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in repeat_quizzes %}
+                <tr>
+                    <td class="align-middle">{{ forloop.counter }}</td>
+                    <td class="align-middle w-100" contenteditable="true" oninput="cellOnInput(this)" onfocusin="cellInFocus(this)" onfocusout="cellOutFocus(this)" data-slug="{{ quiz.slug }}">{{ quiz.name }}</td>
+                    <td class="align-middle w-100">{{ quiz.number_of_questions }}</td>
+                    <td class="align-middle w-100">
+                        <div class="btn-group">
+                            <a href="{% url 'quiz:repeat-quiz' quiz.slug %}" class="btn btn-sm btn-secondary">Start</a>
+                            <a href="{% url 'quiz:delete-repeat-quiz-questions' quiz.slug %}" class="btn btn-sm btn-dark">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td class="align-middle text-center bg-light" colspan="4">No Repeat Quizzes</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    function cellInFocus(element) {
+        element.classList.add("bg-light");
+        element.dataset.old_value = element.innerText;
+    }
+
+    async function cellOutFocus(element) {
+        element.classList.remove("bg-light");
+        let text = element.innerText.trim();
+
+        if (text === "") {
+            element.innerText = element.dataset.old_value;
+        } else {
+            await fetch("/quiz/repeat-quiz/update/name/", {
+                headers: {
+                    "X-CSRFToken": csrf_token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    slug: element.dataset.slug,
+                    name: text
+                })
+            })
+            .then(data => data.json())
+            .then(data => {
+                
+            });
+        }
+    }
+
+    function cellOnInput(element) {
+        
+    }
+</script>
+<script>
+    let errorCQ = "{{ error_custom_quiz }}";
+    let errorCAK = "{{ error_custom_answer_key }}";
+    errorCQ = errorCQ === "True";
+    errorCAK = errorCAK === "True";
+    console.log("ERROR IN CUSTOM QUIZ: ", errorCQ)
+    console.log("ERROR IN CUSTOM ANSWER QUIZ: ", errorCAK)
+
+    const customQuizCreator = document.getElementById("custom-quiz-creator");
+    const customAnswerKey = document.getElementById("custom-answer-key");
+
+    const biologyButtons1 = document.getElementById("biology-buttons-1");
+    const chemistryButtons1 = document.getElementById("chemistry-buttons-1");
+    const subjectSelector1 = document.getElementById("subject-selector-1");
+    const biologyButtons2 = document.getElementById("biology-buttons-2");
+    const chemistryButtons2 = document.getElementById("chemistry-buttons-2");
+    const subjectSelector2 = document.getElementById("subject-selector-2");
+
+    function toggleSubjectButtons2(e) {
+        if (subjectSelector2.value == "biology") {
+            biologyButtons2.classList.remove("hide");
+            chemistryButtons2.classList.add("hide");
+        } else if (subjectSelector2.value == "chemistry") {
+            chemistryButtons2.classList.remove("hide");
+            biologyButtons2.classList.add("hide");
+        }
+    }
+
+    function toggleSubjectButtons1(e) {
+        if (subjectSelector1.value == "biology") {
+            biologyButtons1.classList.remove("hide");
+            chemistryButtons1.classList.add("hide");
+        } else if (subjectSelector1.value == "chemistry") {
+            chemistryButtons1.classList.remove("hide");
+            biologyButtons1.classList.add("hide");
+        }
+    }
+
+    subjectSelector1.onchange = toggleSubjectButtons1;
+    subjectSelector2.onchange = toggleSubjectButtons2;
+
+    function scrollToElement(element) {
+        const y = element.getBoundingClientRect().top + window.scrollY;
+        window.scroll({
+            top: y,
+            behavior: "smooth"
+        });
+    }
+
+    if (errorCQ) {
+        scrollToElement(customQuizCreator)
+    } else if (errorCAK) {
+        scrollToElement(customAnswerKey);
+    }
+</script>
+{% endblock %}

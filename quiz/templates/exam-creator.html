@@ -1,0 +1,823 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Medappl.com - výber módu{% endblock %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+
+<!-- Reloading on back navigation -->
+<script>
+    const entries = performance.getEntriesByType("navigation");
+    entries.forEach((entry) => {
+        if (entry.type === "back_forward") {
+            window.location.reload();
+        }
+    });
+</script>
+
+
+
+
+
+
+
+<div class="ex-panel-1">
+
+    <!-- SAVED QUIZZES -->
+
+    <section class="card mt-4 mb-4" id="saved-quizzes">
+        {% csrf_token %}
+        <div class="card-header">
+            <h3>Saved Quizzes</h3>
+            <p class="m-0">Following are your saved quizzes</p>
+        </div>
+        <div class="card-body">
+            {% for quiz, color in saved_quizzes %}
+            <div class="card mb-4">
+                <div class="card-header d-flex w-100 justify-content-between align-items-center">
+                    <h6><i class="fa fa-circle mr-2" aria-hidden="true" style="color: {{ color.0 }} !important"></i><span data-linker="slug:{{ quiz.slug }}" contenteditable="true" oninput="cellOnInput(this)" onfocusin="cellInFocus(this)" onfocusout="cellOutFocus(this, 'SAVED')" data-slug="{{ quiz.slug }}">{{ quiz.name }}</span></h6>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#m-view-saved-quiz-settings-modal-{{ quiz.slug }}">View Settings</button>
+                            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#m-delete-saved-quiz-modal-{{ quiz.slug }}">Delete</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-row w-100" id="quiz-buttons">
+                        <form action="{% url 'quiz:saved-quiz' quiz.slug 1 %}" method="post" class="mb-0 w-100">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark w-100" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 1</button>
+                        </form>
+                        
+                        <button type="button" data-toggle="modal" data-target="#m-mode-2-saved-quiz-modal-{{ quiz.slug }}" class="btn btn-dark w-100" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 2</button>
+
+
+                        {% if request.user.subscription.subscription.is_premium %}
+                        <form action="{% url 'quiz:saved-quiz' quiz.slug 3 %}" method="post" class="mb-0 w-100">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark w-100" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 3</button>
+                        </form>
+
+                        <button type="button" data-toggle="modal" data-target="#m-mode-4-saved-quiz-modal-{{ quiz.slug }}" class="btn btn-dark w-100" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 4</button>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <div class="modal" id="m-mode-2-saved-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-mode-2-saved-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="m-mode-2-saved-quiz-modal-{{ quiz.slug }}-label">{{ quiz.name }} Mode 2</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="{% url 'quiz:saved-quiz' quiz.slug 2 %}" method="post" class="text-left">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="start">Start</label>
+                                                <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                    placeholder="Enter a start number">
+                                                <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success">Start Mode 2</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal" id="m-mode-4-saved-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-mode-4-saved-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="m-mode-4-saved-quiz-modal-{{ quiz.slug }}-label">{{ quiz.name }} Mode 4</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="{% url 'quiz:saved-quiz' quiz.slug 4 %}" method="post" class="text-left">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="start">Start</label>
+                                                <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                    placeholder="Enter a start number">
+                                                <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success">Start Mode 4</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal" id="m-view-saved-quiz-settings-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-view-saved-quiz-settings-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-light">
+                                        <h5 class="modal-title" id="m-view-saved-quiz-settings-modal-{{ quiz.slug }}-label">Saved Quiz Settings</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>These settings can't be changed. In order to have new settings, create a new saved quiz from the Quiz Creator section.</p>
+                                        <table class="table table-sm table-bordered table-hover text-center mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Setting</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Number of Questions</td>
+                                                    <td class="align-middle text-nowrap">{{ quiz.number_of_questions }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Number of Options per Question</td>
+                                                    <td class="align-middle text-nowrap">{{ quiz.number_of_options_per_question }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Voice Recognition</td>
+                                                    {% if quiz.voice_recognition %}
+                                                        <td class="align-middle text-nowrap"><i class="text-success fa fa-check-circle"></i></td>
+                                                    {% else %}
+                                                        <td class="align-middle text-nowrap"><i class="text-danger fa fa-times-circle"></i></td>
+                                                    {% endif %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Negative Marking</td>
+                                                    {% if quiz.negative_marking %}
+                                                        <td class="align-middle text-nowrap"><i class="text-success fa fa-check-circle"></i></td>
+                                                    {% else %}
+                                                        <td class="align-middle text-nowrap"><i class="text-danger fa fa-times-circle"></i></td>
+                                                    {% endif %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Language</td>
+                                                    <td class="align-middle text-nowrap"><span class="badge badge-light">{{ quiz.language }}</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Questions</td>
+                                                    {% if quiz.questions %}
+                                                        <td class="align-middle text-nowrap"><a data-toggle="tooltip" data-placement="bottom" title="{{ quiz.questions_filename }}" href="{{ quiz.questions.url }}" download><i class="fa text-info fa-download"></i></a></td>
+                                                    {% else %}
+                                                        <td class="align-middle"><i class="text-danger fa fa-times-circle"></i></td>
+                                                    {% endif %}
+                                                </tr>
+                                                <tr>
+                                                    <td class="align-middle text-nowrap">Answers</td>
+                                                    <td class="align-middle text-nowrap"><a data-toggle="tooltip" data-placement="bottom" title="{{ quiz.answers_filename }}" href="{{ quiz.answers.url }}" download><i class="fa text-info fa-download"></i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer bg-light">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal" id="m-delete-saved-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-delete-saved-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="m-delete-saved-quiz-modal-{{ quiz.slug }}-label">Delete Saved Quiz</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure? This action can't be undone.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a href="{% url 'quiz:delete-saved-quiz' quiz.slug %}" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="align-middle text-center bg-light p-2">No saved quizzes available</div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <!-- REPEAT QUIZZES -->
+
+    <section class="card mt-4 mb-4" id="repeat-quizzes">
+        {% csrf_token %}
+        <div class="card-header">
+            <h3>Repeat Quizzes {% if not request.user.subscription.subscription.is_premium %}<span class="ml-2"><i class="fa fa-star text-warning" data-toggle="tooltip" data-placement="bottom" title="Premium feature"></i></span>{% endif %}</h3>
+            <p class="m-0">Following are your repeat quizzes</p>
+        </div>
+        <div class="card-body">
+            {% if request.user.subscription.subscription.is_premium %}
+                {% for quiz, color in repeat_quizzes %}
+                    <div class="card mb-4">
+                        <div class="card-header d-flex w-100 justify-content-between align-items-center">
+                            <h6><i class="fa fa-circle mr-2" aria-hidden="true" style="color: {{ color.0 }} !important"></i><span data-linker="slug:{{ quiz.parent_slug }}" contenteditable="true" oninput="cellOnInput(this)" onfocusin="cellInFocus(this)" onfocusout="cellOutFocus(this, 'REPEAT')" data-slug="{{ quiz.slug }}">{{ quiz.name }}</span></h6>
+                                                    
+                            <div class="btn-group">
+                                <button class="btn btn-secondary" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} type="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#m-delete-modal-{{ quiz.slug }}">Delete Questions</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="btn-group w-100" id="quiz-buttons">
+                                <button type="button" class="btn btn-dark w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#m-view-modal-{{ quiz.slug }}" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">View</button>
+                                
+                                <form action="{% url 'quiz:repeat-quiz' quiz.slug 3 %}" method="post" class="m-0 w-100">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %}  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 3</button>
+                                </form>
+                            
+                                <button type="button" class="btn btn-dark w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#m-mode-4-repeat-quiz-modal-{{ quiz.slug }}"  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 4</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal" id="m-mode-4-repeat-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-mode-4-repeat-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="m-mode-4-repeat-quiz-modal-{{ quiz.slug }}-label">Repeat Quiz Mode 4</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{% url 'quiz:repeat-quiz' quiz.slug 4 %}" method="post" class="text-left">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="start">Start</label>
+                                                    <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                        placeholder="Enter a start number">
+                                                    <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success">Start Mode 4</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal" id="m-delete-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-delete-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="m-delete-modal-{{ quiz.slug }}-label">Delete Repeat Quiz Questions</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure? This action can't be undone.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a href="{% url 'quiz:delete-repeat-quiz-questions' quiz.slug %}" class="btn btn-danger">Delete Questions</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal" id="m-view-modal-{{ quiz.slug }}" tabindex="-1" aria-labelledby="m-view-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="m-view-modal-{{ quiz.slug }}-label">{{ quiz.name }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table table-sm table-bordered table-hover text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Question</th>
+                                                        <th scope="col">Options</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for question in quiz.get_questions_sorted %}
+                                                        <tr>
+                                                            <td>{{ question.question|slice:":-1" }}</td>
+                                                            <td>
+                                                                {% for option in question.get_options %}
+                                                                <span class="badge badge-pill badge-light pl-2 pr-2 pt-1 pb-1 text-uppercase">{{ option.option }}</span>
+                                                                {% endfor %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="align-middle text-center bg-light p-2">No repeat quizzes available</div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-primary mb-0 text-center" role="alert">This section is reserved for Premium users only.</div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+
+<div class="ex-panel-2">
+    <!-- SAVED QUIZZES -->
+
+    <section class="card mt-4 mb-4" id="saved-quizzes">
+        {% csrf_token %}
+        <div class="card-header">
+            <h3>Saved Quizzes</h3>
+            <p class="m-0">Following are your saved quizzes</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive rounded">
+                <table class="table table-hover text-center rounded mb-0" id="repeat-quizzes-table">
+                    <!-- <thead class="bg-light">
+                        <tr>
+                            <th scope="col" class="text-nowrap rounded">#</th>
+                            <th scope="col" class="text-nowrap">Name<i class="fa fa-info bg-light border ml-2 badge-pill p-1 pl-2 pr-2"  data-toggle="tooltip" data-placement="bottom" title="Click on the cell to edit the name. Make sure it's unique."></i></th>
+                            <th scope="col" class="text-nowrap">Actions</th>
+                        </tr>
+                    </thead> -->
+                    <tbody>
+                        {% for quiz, color in saved_quizzes %}
+                        <tr class="text-center border">
+                            <td class="align-middle"><i class="fa fa-circle" aria-hidden="true" style="color: {{ color.0 }} !important"></i></td>
+                            <td class="align-middle w-100 text-nowrap" data-linker="slug:{{ quiz.slug }}" contenteditable="true" oninput="cellOnInput(this)" onfocusin="cellInFocus(this)" onfocusout="cellOutFocus(this, 'SAVED')" data-slug="{{ quiz.slug }}">{{ quiz.name }}</td>
+                            <td class="align-middle d-flex w-100">
+                                <form action="{% url 'quiz:saved-quiz' quiz.slug 1 %}" method="post" class="m-0 mr-2">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark w-100 text-nowrap" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 1</button>
+                                </form>
+                                <button type="button" class="mr-2 btn btn-dark w-100 text-nowrap" data-toggle="modal" data-target="#mode-2-saved-quiz-modal-{{ quiz.slug }}" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 2</button>
+                                
+                                {% if request.user.subscription.subscription.is_premium %}
+                                    <form action="{% url 'quiz:saved-quiz' quiz.slug 3 %}" method="post" class="m-0 mr-2">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-dark w-100 text-nowrap" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 3</button>
+                                    </form>
+                                    <button type="button" class="mr-2 btn btn-dark w-100 text-nowrap" data-toggle="modal" data-target="#mode-4-saved-quiz-modal-{{ quiz.slug }}" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 4</button>
+                                {% endif %}
+                                <div class="modal  " id="mode-2-saved-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="mode-2-saved-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="mode-2-saved-quiz-modal-{{ quiz.slug }}-label">{{ quiz.name }} Mode 2</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{% url 'quiz:saved-quiz' quiz.slug 2 %}" method="post" class="text-left">
+                                                {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="start">Start</label>
+                                                        <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                            placeholder="Enter a start number">
+                                                        <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Start Mode 2</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal  " id="mode-4-saved-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="mode-4-saved-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="mode-4-saved-quiz-modal-{{ quiz.slug }}-label">{{ quiz.name }} Mode 4</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{% url 'quiz:saved-quiz' quiz.slug 4 %}" method="post" class="text-left">
+                                                {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="start">Start</label>
+                                                        <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                            placeholder="Enter a start number">
+                                                        <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Start Mode 4</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary" type="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#view-saved-quiz-settings-modal-{{ quiz.slug }}">View Settings</button>
+                                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#delete-saved-quiz-modal-{{ quiz.slug }}">Delete</button>
+                                    </div>
+                                </div>
+                                <div class="modal" id="view-saved-quiz-settings-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="view-saved-quiz-settings-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-light">
+                                                <h5 class="modal-title" id="view-saved-quiz-settings-modal-{{ quiz.slug }}-label">Saved Quiz Settings</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>These settings can't be changed. In order to have new settings, create a new saved quiz from the Quiz Creator section.</p>
+                                                <table class="table table-sm table-bordered table-hover text-center mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Setting</th>
+                                                            <th scope="col">Value</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Number of Questions</td>
+                                                            <td class="align-middle text-nowrap">{{ quiz.number_of_questions }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Number of Options per Question</td>
+                                                            <td class="align-middle text-nowrap">{{ quiz.number_of_options_per_question }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Voice Recognition</td>
+                                                            {% if quiz.voice_recognition %}
+                                                                <td class="align-middle text-nowrap"><i class="text-success fa fa-check-circle"></i></td>
+                                                            {% else %}
+                                                                <td class="align-middle text-nowrap"><i class="text-danger fa fa-times-circle"></i></td>
+                                                            {% endif %}
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Negative Marking</td>
+                                                            {% if quiz.negative_marking %}
+                                                                <td class="align-middle text-nowrap"><i class="text-success fa fa-check-circle"></i></td>
+                                                            {% else %}
+                                                                <td class="align-middle text-nowrap"><i class="text-danger fa fa-times-circle"></i></td>
+                                                            {% endif %}
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Language</td>
+                                                            <td class="align-middle text-nowrap"><span class="badge badge-light">{{ quiz.language }}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Questions</td>
+                                                            {% if quiz.questions %}
+                                                                <td class="align-middle text-nowrap"><a data-toggle="tooltip" data-placement="bottom" title="{{ quiz.questions_filename }}" href="{{ quiz.questions.url }}" download><i class="fa text-info fa-download"></i></a></td>
+                                                            {% else %}
+                                                                <td class="align-middle"><i class="text-danger fa fa-times-circle"></i></td>
+                                                            {% endif %}
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="align-middle text-nowrap">Answers</td>
+                                                            <td class="align-middle text-nowrap"><a data-toggle="tooltip" data-placement="bottom" title="{{ quiz.answers_filename }}" href="{{ quiz.answers.url }}" download><i class="fa text-info fa-download"></i></a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer bg-light">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal  " id="delete-saved-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="delete-saved-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete-saved-quiz-modal-{{ quiz.slug }}-label">Delete Saved Quiz</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure? This action can't be undone.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <a href="{% url 'quiz:delete-saved-quiz' quiz.slug %}" class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td class="align-middle text-center bg-light" colspan="9">No saved quizzes available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- REPEAT QUIZZES -->
+
+    <section class="card mt-4 mb-4" id="repeat-quizzes">
+        {% csrf_token %}
+        <div class="card-header">
+            <h3>Repeat Quizzes {% if not request.user.subscription.subscription.is_premium %}<span class="ml-2"><i class="fa fa-star text-warning" data-toggle="tooltip" data-placement="bottom" title="Premium feature"></i></span>{% endif %}</h3>
+            <p class="m-0">Following are your repeat quizzes</p>
+        </div>
+        <div class="card-body">
+            {% if request.user.subscription.subscription.is_premium %}
+                <div class="table-responsive rounded">
+                    <table class="table table-hover text-center rounded mb-0" id="repeat-quizzes-table">
+                        <!-- <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap">#</th>
+                                <th scope="col" class="text-nowrap">Name<i class="fa fa-info bg-light border ml-2 badge-pill p-1 pl-2 pr-2"  data-toggle="tooltip" data-placement="bottom" title="Click on the cell to edit the name. Make sure it's unique."></i></th>
+                                <th scope="col" class="text-nowrap">Type</th>
+                                <th scope="col" class="text-nowrap">Actions</th>
+                            </tr>
+                        </thead> -->
+                        <tbody>
+                            {% for quiz, color in repeat_quizzes %}
+                            <tr class="text-center border" id="saved-quiz-{{ quiz.slug }}">
+                                <!-- <td class="align-middle">{{ forloop.counter }}</td> -->
+                                <td class="align-middle"><i class="fa fa-circle" aria-hidden="true" style="color: {{ color.0 }} !important"></i></td>
+                                {% if request.user.subscription.subscription.is_premium %}                        
+                                    <td  class="align-middle text-nowrap w-100" data-linker="slug:{{ quiz.parent_slug }}" contenteditable="true" oninput="cellOnInput(this)" onfocusin="cellInFocus(this)" onfocusout="cellOutFocus(this, 'REPEAT')" data-slug="{{ quiz.slug }}">{{ quiz.name }}</td>
+                                {% else %}
+                                    <td  class="align-middle text-nowrap w-100" data-linker="slug:{{ quiz.parent_slug }}" data-slug="{{ quiz.slug }}">{{ quiz.name }}</td>
+                                {% endif %}
+                                <!-- <td class="align-middle w-100">{{ quiz.get_quiz_type_display }}</td> -->
+                                <td class="align-middle">
+                                    <div class="d-flex">
+                                        <button type="button" class="mr-2 btn btn-dark text-nowrap w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#view-modal-{{ quiz.slug }}"  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">View Saved Questions/Options</button>
+                                        <form action="{% url 'quiz:repeat-quiz' quiz.slug 3 %}" method="post" class="m-0 mr-2">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-dark text-nowrap" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %}  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 3</button>
+                                        </form>
+                                        <button type="button" class="mr-2 btn btn-dark text-nowrap" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#mode-4-repeat-quiz-modal-{{ quiz.slug }}"  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 4</button>
+                                    </div>
+                                    <div class="modal  " id="mode-4-repeat-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="mode-4-repeat-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="mode-4-repeat-quiz-modal-{{ quiz.slug }}-label">Repeat Quiz Mode 4</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{% url 'quiz:repeat-quiz' quiz.slug 4 %}" method="post" class="text-left">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="start">Start</label>
+                                                            <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                                placeholder="Enter a start number">
+                                                            <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-success">Start Mode 4</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} type="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+                                        <div class="dropdown-menu">
+                                            <!-- <button type="button" class="dropdown-item" data-toggle="modal" data-target="#view-modal-{{ quiz.slug }}">View</button> -->
+                                            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#delete-modal-{{ quiz.slug }}">Delete Questions</button>
+                                        </div>
+                                    </div>
+                                    <div class="modal  " id="delete-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="delete-modal-{{ quiz.slug }}-label"
+                                        aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="delete-modal-{{ quiz.slug }}-label">Delete Repeat Quiz Questions</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure? This action can't be undone.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <a href="{% url 'quiz:delete-repeat-quiz-questions' quiz.slug %}" class="btn btn-danger">Delete Questions</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal  " id="view-modal-{{ quiz.slug }}" tabindex="-1" aria-labelledby="view-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="view-modal-{{ quiz.slug }}-label">{{ quiz.name }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <table class="table table-sm table-bordered table-hover text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Question</th>
+                                                                    <th scope="col">Options</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for question in quiz.get_questions_sorted %}
+                                                                    <tr>
+                                                                        <td>{{ question.question|slice:":-1" }}</td>
+                                                                        <td>
+                                                                            {% for option in question.get_options %}
+                                                                            <span class="badge badge-pill badge-light pl-2 pr-2 pt-1 pb-1 text-uppercase">{{ option.option }}</span>
+                                                                            {% endfor %}
+                                                                        </td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="align-middle text-center bg-light" colspan="9">No repeat quizzes available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-primary mb-0 text-center" role="alert">This section is reserved for Premium users only.</div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+<!-- CUSTOM QUIZ CREATOR -->
+
+<section class="card mt-4 mb-4" id="custom-quiz-creator">
+    <div class="card-header">
+        <h3>Custom Quiz Creator</h3>
+        <p class="m-0">Upload your own questions and answer keys.</p>
+    </div>
+    <div class="card-body">
+        <form action="{% url 'quiz:exam-creator' %}" method="POST" class="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row mb-3">
+                <div class="form-group col-md-4">
+                    <label for="name" class="form-label mb-0">Name</label>
+                    <br>
+                    <small class="">Name of the quiz</small>
+                    <input type="text" name="name" id="name" class="form-control {% if 'name' in form.errors %} is-invalid {% endif %}">
+                    <div class="invalid-feedback">
+                        {{ form.errors.name|striptags }}
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="number_of_questions" class="form-label mb-0">Number of Questions</label>
+                    <br>
+                    <small class="">Total number of questions in the quiz file</small>
+                    <input type="number" min="1" max="1500" name="number_of_questions" id="number_of_questions" value="1500"
+                        class="form-control {% if 'number_of_questions' in form.errors %} is-invalid {% endif %}">
+                    <div class="invalid-feedback">
+                        Number of questions should be between 1 and 1500.
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="options_per_questions" class="form-label mb-0">Number of Answers per Question</label>
+                    <br>
+                    <small class="">Number of options per question in the quiz/answers file</small>
+                    <input type="number" min="1" max="8" name="options_per_questions" id="options_per_questions" value="8"
+                        class="form-control {% if 'options_per_questions' in form.errors %} is-invalid {% endif %}">
+                    <div class="invalid-feedback">
+                        Number of answer per question should be between 1 and 8.
+                    </div>  
+                </div>
+            </div>
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label for="negativeMarking" class="form-label mb-0">Negative Marking</label>
+                    <br>
+                    <small class="">Enable/Disable negative marking in the quiz</small>
+                    <select class="custom-select" name="negativeMarking" id="negativeMarking">
+                        <option selected value="1">Yes</option>
+                        <option value="0">Nope</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="voiceRecognition" class="form-label mb-0">Voice Recognition</label>
+                    <br>
+                    <small class="">Enable/Disable voice recognition in the quiz</small>
+                    <select class="custom-select" name="voiceRecognition" id="voice-recognition-selector-3">
+                        <option  value="1">Enable</option>
+                        <option selected value="0">Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row mb-3">
+                <div class="form-group col-md-4">
+                    <label for="language" class="form-label mb-0">Language</label>
+                    <br>
+                    <small class="">Audio language in the quiz</small>
+                    <select class="custom-select" name="language" id="language">
+                        <option selected value="slovak1">Slovak 1</option>
+                        <option value="slovak2">Slovak 2</option>
+                        <option value="czech2">Czech 1</option>
+                        <option value="czech2">Czech 2</option>
+                        <option value="english1">English 1</option>
+                        <option value="english2">English 2</option>
+                        <option value="no-audio">No Audio</option>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="form-label mb-0" for="questions">Questions</label>
+                    <br>
+                    <small class="">File containing questions of the quiz</small>
+                    <input type="file" name="questions"
+                        class="form-control {% if 'questions' in form.errors %} is-invalid {% endif %}" id="que stions"
+                        aria-describedby="questions" accept=".txt">
+                    <div class="invalid-feedback">
+                        {{ form.errors.question|striptags }}
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="form-label mb-0" for="answers">Answers</label>
+                    <br>
+                    <small class="">File containing answer key of the quiz</small>
+                    <input type="file" name="answers"
+                        class="form-control {% if 'answers' in form.errors %} is-invalid {% endif %}" id="answers"
+                        aria-describedby="answers" accept=".txt">
+                    <div class="invalid-feedback">
+                        {{ form.errors.answers|striptags }}
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group w-100">
+                <button type="submit" name="quiz_type" class="btn btn-dark" value="cq">Generate and Save</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'utils.js' %}"></script>
+<script>
+    let errorCQ = "{{ error_custom_quiz }}";
+    errorCQ = errorCQ === "True";
+    console.log("ERROR IN CUSTOM QUIZ: ", errorCQ)
+
+    const customQuizCreator = document.getElementById("custom-quiz-creator");
+
+    if (errorCQ) {
+        scrollToElement(customQuizCreator)
+    }
+</script>
+{% endblock %}

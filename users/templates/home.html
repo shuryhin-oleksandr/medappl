@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Medappl.com - online testovanie a príprava na prijímacie skúšky na medicínu a ďalšie odbory využívajúce knihu modelových otázok{% endblock %}
+
+{% block content %}
+<h3 style="margin-top: 0.9em;">Medappl.com - Aplikácia na online testovanie a efektívnu prípravu na prijímacie skúšky na prijímacie skúšky na medicínu a ďalšie odbory využívajúce knihu modelových otázok</h3>
+
+<div style="margin-top: 0.5em; margin-bottom: 0.5em;" class='btn-group' role="group">
+{% if request.user.is_authenticated %}
+  <a href='{% url 'register' %}' class='btn btn-default btn-secondary disabled' tabindex='-1' aria-disabled='true'>Registrácia</a>
+  <a href='{% url 'login' %}' class='btn btn-default btn-success disabled' tabindex='-1' aria-disabled='true'>Prihlásiť</a></div>
+{% else %}
+  <a href='{% url 'register' %}' class='btn btn-default btn-secondary' >Registrácia</a>
+  <a href='{% url 'login' %}' class='btn btn-default btn-success' >Prihlásiť</a></div>
+{% endif %}
+{% if request.user.is_authenticated %}
+  <a href='{% url 'logout' %}' class='btn btn-default btn-danger' >Odhlásiť</a>
+<p style="margin-top: 0.5em;"> Vitajte {{user}}. Pre spustenie aplikácie stlačte tlačidlo 'ŠTART'. </p>
+
+{% endif %}
+
+	  <p> Testing2 Vitajte na úvodnej stránke aplikácie medappl, ktorá bola naprogramovaná za účelom prípravy študentov na prijímacie konanie k študijným programom všeobecné a zubné lekárstvo LFUK. Aplikácia simuluje reálne prijímacie skúšky. Používateľ aplikácie má 90 minút na zodpovedanie 100 otázok z biológie a ďalších 90 minút na 100 otázok z chémie. Iba 4 z 8 odpovedí sú náhodne vybrané a po zodpovedaní každej otázky Vám aplikácia napíše, či ste odpovedali správne. Po dokončení skúšky získate ihneď presné bodové ohodnotenie. Maximálny počet bodov je 800, pričom 400 bodov môžete získať z biológie a 400 z chémie, presne tak, ako aj na reálnej skúške.</p><p> Aplikácia obsahuje celú databázu 3 000 otázok, 24 000 odpovedí a taktiež obsahuje druhý “trénovací” mód, pri ktorom je možné vybrať si štartovaciu otázku od ktorej chcete skúšku začať. <u> Aplikácia nie je náhradou za podklady na prijímacie skúšky</u> (zobrazuje náhodne iba 4 z 8 odpovedí), ale slúži iba ako pomôcka k efektívnejšej príprave. Je úplne zadarmo pre všetkých.</p>
+	  <img src="/media/intro/chem.jpg" alt="Medappl aplikácia" class="introimages"/>
+<h5 style="margin-top: 0.9em;">Ako aplikácia funguje:</h5>		
+<p> Pri móde 1 (skúškový mód) aplikácia náhodne vyberie otázku a náhodne vyberie 4 z 8 odpovedí, presne tak, ako to je na prijímacích skúškach. Pri móde 2 (trénovací mód) sa tiež náhodne vyberie 4 z 8 odpovedí, ale štartovacia otázka je voliteľná a ďalšie otázky nasledujú za sebou. Mód 2 je vhodný, ak sa chcete otestovať z konkrétnej časti prijímacích podkladov, napríklad zadáte štartovaciu otázku 650 a po zodpovedaní 100 otázok (650 - 750) sa Vám zobrazí bodové skóre, kde taktiež môžete získať maximum 400 bodov za každý predmet.</p>
+		<p> Medappl.com je webová aplikácia, takže ju netreba sťahovať, a dá sa používať aj na počítači aj na mobilnom zariadení. Na mobilnom zariadení bola optimalizovaná na chod v režime 'na šírku' (landscape mode) a dá ovládať pomocou tlačidiel “Správne” a “Nesprávne”. Na počítači sa dá okrem tlačidiel ovládať aj pomocou klávesnice. Pre správnu odpoveď treba stlačiť klávesu “A” a pre nesprávnu odpoveď klávesu “D”.</p>
+<h5 style="margin-top: 0.9em;">Motivácia:</h5>		
+<p> Ako predošlý úspešný absolvent prijímacích skúšok LFUK som sa rozhodol túto aplikáciu vytvoriť z dôvodu, aby sa mohli študenti efektívnejšie pripraviť na prijímacie skúšky a cielene odstraňovať svoje slabosti. Je vhodná pre všetkých uchádzačov na prijímačky na medicínu, ale hlavne pre tých, ktorým chýba možnosť byť niekým pravidelne testovaný. Nie každý uchádzač pochádza z rovnakého podporujúceho prostredia a mojou motiváciou k práci na tejto aplikácií bolo, aby každý uchádzač mal rovnaké možnosti kvalitne sa pripraviť na prijímacie skúšky.</p>
+		<p> Som autorom zdrojového kódu aplikácie. Aplikácia je úplne zadarmo. Všetkým Vám prajem úspešné testovanie a držím palce na prijímacích skúškach. </p>
+{% if request.user.is_authenticated %}
+<h5 style="margin-top: 0.9em;" id="prispevok" name="prispevok">Príspevok:</h5>
+<p> Ak ste s aplikáciou spokojní, budem veľmi rád ak prispejete. Príspevok sa použije na elektrinu ktorú server spotrebuje, aby bolo možné server na ktorom aplikácia beží prevádzkovať aj naďalej. Za akýkoľvek príspevok vopred veľmi pekne ďakujem.</p>
+<p>Paypal adresa: curiexp@gmail.com</p>
+<p>Bankový prevod: Albert Mikolaj, IBAN: SK73 1111 0000 0015 7575 7009</p>
+{% endif %}
+<h5 style="margin-top: 0.9em;">Ďalšie projekty:</h5>
+<p>Moje minulé aj budúce opensource projekty môžete sledovať na mojej <a href="https://github.com/">Github stránke</a>.</p>
+<h5 style="margin-top: 0.9em;">Kontakt:</h5>
+		<p style="margin-bottom: 2.5em;"> Email: <a href="mailto:medicina.appl@gmail.com">medicina.appl@gmail.com</a></p>
+  </section>
+{% endblock %}

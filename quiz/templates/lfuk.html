@@ -1,0 +1,603 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+
+<!-- Reloading on back navigation -->
+<script>
+    const entries = performance.getEntriesByType("navigation");
+    entries.forEach((entry) => {
+        if (entry.type === "back_forward") {
+            window.location.reload();
+        }
+    });
+</script>
+
+<!-- BIOLOGY Quiz -->
+
+<section class="card mt-4">
+    <div class="card-header">
+        <h3>Biology</h3>
+        <p class="m-0">Test your Biology knowledge with out pre-built quiz!</p>
+    </div>
+    <div class="card-body">
+        <div class="form-row mb-3">
+            <div class="form-group col-md-6">
+                <label for="language-select-1" class="form-label">Language</label>
+                <select class="custom-select" name="language-select-1" id="language-select-1">
+                    <option selected value="slovak1">Slovak 1</option>
+                    <option value="slovak2">Slovak 2</option>
+                    <option value="czech2">Czech 1</option>
+                    <option value="czech2">Czech 2</option>
+                    <option value="english1">English 1</option>
+                    <option value="english2">English 2</option>
+                    <option value="no-audio">No Audio</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="voiceRecognition" class="form-label">Voice Recognition</label>
+                <select class="custom-select" name="voiceRecognition" id="voice-recognition-selector-1">
+                    <option selected value="0">Disable</option>
+                    <option value="1">Enable</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="btn-group w-100" id="quiz-buttons">
+            <button type="button" href="{% url 'quiz:general-quiz' 1 %}" name="mode" id="bm1" class="mode-1 start-mode btn btn-dark" style="background-color: {{ general_quiz_colors.0.0 }} !important; color: {{ general_quiz_colors.0.1 }} !important;">Mode 1</button>
+            <button type="button" href="{% url 'quiz:general-quiz' 2 %}" name="mode" id="bm2" class="mode-2 start-mode btn btn-secondary" style="background-color: {{ general_quiz_colors.0.0 }} !important; color: {{ general_quiz_colors.0.1 }} !important;">Mode 2</button>
+            <button type="button" href="{% url 'quiz:general-quiz' 3 %}" name="mode" id="bm3" class="mode-3 start-mode btn btn-dark" style="background-color: {{ general_quiz_colors.0.0 }} !important; color: {{ general_quiz_colors.0.1 }} !important;">Mode 3</button>
+            <button type="button" href="{% url 'quiz:general-quiz' 4 %}" name="mode" id="bm4" class="mode-4 start-mode btn btn-secondary" style="background-color: {{ general_quiz_colors.0.0 }} !important; color: {{ general_quiz_colors.0.1 }} !important;">Mode 4</button>
+        </div>
+
+        <button type="button" id="modal-opener-1" class="btn btn-primary hide" data-toggle="modal" data-target="#startModalOpener1">Launch demo modal</button>
+        <div class="modal" id="startModalOpener1" tabindex="-1" role="dialog" aria-labelledby="startModalOpener1Label"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="startModalOpener1Label">Biology Mode <span id="start-modal-mode-text-1"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" class="col-md-12 start-container-1 form-group start-form" method="POST" id="start-form-1">
+                            {% csrf_token %}
+                            <div class="mt-3 alert alert-primary" role="alert">
+                                Do textového poľa zadajte číslo štartovacej otázky a stlačte tlačidlo Štart
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12 text-left">
+                                    <input type="number" min="1" name="start" id="start-1" class="form-control"
+                                        placeholder="Starting Question">
+                                    <small for="start" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                </div>
+                            </div>
+                            <input type="hidden" name="subject" id="subject-1" value="biology">
+                            <input type="hidden" name="language" id="language-1">
+                            <input type="hidden" name="voiceRecognition" id="voiceRecognition-1">
+                            <button type="submit" class="btn btn-default w-100 btn-success">Štart</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHEMISTRY Quiz -->
+
+<section class="card mt-4">
+    <div class="card-header">
+        <h3>Chemistry</h3>
+        <p class="m-0">Test your Chemistry knowledge with out pre-built quiz!</p>
+    </div>
+    <div class="card-body">
+        <div class="form-row mb-3">
+            <div class="form-group col-md-6">
+                <label for="language-select-2" class="form-label">Language</label>
+                <select class="custom-select" name="language-select-2" id="language-select-2">
+                    <option selected value="slovak1">Slovak 1</option>
+                    <option value="slovak2">Slovak 2</option>
+                    <option value="czech2">Czech 1</option>
+                    <option value="czech2">Czech 2</option>
+                    <option value="english1">English 1</option>
+                    <option value="english2">English 2</option>
+                    <option value="no-audio">No Audio</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="voiceRecognition" class="form-label">Voice Recognition</label>
+                <select class="custom-select" name="voiceRecognition" id="voice-recognition-selector-2">
+                    <option selected value="0">Disable</option>
+                    <option value="1">Enable</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="btn-group w-100" id="quiz-buttons">
+            <button type="button" href="{% url 'quiz:general-quiz' 1 %}" name="mode" id="cm1" class="mode-1 start-mode btn btn-dark" style="background-color: {{ general_quiz_colors.1.0 }} !important; color: {{ general_quiz_colors.1.1 }} !important;">Mode 1</button>
+            <button type="button" href="{% url 'quiz:general-quiz' 2 %}" name="mode" id="cm2" class="mode-2 start-mode btn btn-secondary" style="background-color: {{ general_quiz_colors.1.0 }} !important; color: {{ general_quiz_colors.1.1 }} !important;">Mode 2</button>
+            <button type="button" href="{% url 'quiz:general-quiz' 3 %}" name="mode" id="cm3" class="mode-3 start-mode btn btn-dark" style="background-color: {{ general_quiz_colors.1.0 }} !important; color: {{ general_quiz_colors.1.1 }} !important;">Mode 3</button>
+            <button type="button" href="{% url 'quiz:general-quiz' 4 %}" name="mode" id="cm4" class="mode-4 start-mode btn btn-secondary" style="background-color: {{ general_quiz_colors.1.0 }} !important; color: {{ general_quiz_colors.1.1 }} !important;">Mode 4</button>
+        </div>
+
+        <button type="button" id="modal-opener-2" class="btn btn-primary hide" data-toggle="modal" data-target="#startModalOpener2">Launch demo modal</button>
+        <div class="modal" id="startModalOpener2" tabindex="-1" role="dialog" aria-labelledby="startModalOpener2Label"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="startModalOpener1Label">Chemistry Mode <span id="start-modal-mode-text-2"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" class="col-md-12 start-container-2 form-group start-form" method="POST" id="start-form-2">
+                            {% csrf_token %}
+                            <div class="mt-3 alert alert-primary" role="alert">
+                                Do textového poľa zadajte číslo štartovacej otázky a stlačte tlačidlo Štart
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12 text-left">
+                                    <input type="number" min="1" name="start" id="start-1" class="form-control"
+                                        placeholder="Starting Question">
+                                    <small for="start" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                </div>
+                            </div>
+                            <input type="hidden" name="subject" id="subject-2" value="chemistry">
+                            <input type="hidden" name="language" id="language-2">
+                            <input type="hidden" name="voiceRecognition" id="voiceRecognition-2">
+                            <button type="submit" class="btn btn-default w-100 btn-success">Štart</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let redirectURL = undefined;
+    let selectedMode = undefined;
+    let selectedQuiz = undefined;
+
+    let modalOpener1 = document.getElementById("modal-opener-1");
+    let modalOpener2 = document.getElementById("modal-opener-2");
+
+    $("form.start-container-1").hide();
+    
+    $(".start-form").submit(function () {
+        if (selectedMode === "2" || selectedMode === "4") {
+            switch(selectedQuiz) {
+                case 1:
+                    if (document.querySelector("#start-1").value.trim() == "") {
+                        alert("No start value provided!")
+                        return false;
+                    }
+
+                    break;
+
+                case 2:
+                    if (document.querySelector("#start-2").value.trim() == "") {
+                        alert("No start value provided!")
+                        return false;
+                    }
+
+                    break;
+            }
+        }
+    });
+
+    $(".start-mode").click(function (event) {
+        event.preventDefault();
+        
+        let btn = event.target;
+
+        let subject = "";
+        let mode = "1";
+        let language = "no-audio";
+        let voiceRecognition = "0";
+        let quizIndex = 0;
+        
+        if (btn.id.charAt(0) == "b") {
+            quizIndex = 1;
+            subject = "biology";
+            language = document.getElementById("language-select-1").value;
+            voiceRecognition = document.getElementById("voice-recognition-selector-1").value;
+        } else if (btn.id.charAt(0) == "c") {
+            quizIndex = 2;
+            subject = "chemistry";
+            language = document.getElementById("language-select-2").value;
+            voiceRecognition = document.getElementById("voice-recognition-selector-2").value;
+        }
+
+        mode = btn.id.charAt(2);
+        selectedMode = mode;
+
+        if (mode == "1" || mode == "3") {
+            if (mode === "1")
+                redirectURL = `{% url 'quiz:general-quiz' 1 %}`;
+            else if (mode === "3")
+                redirectURL = `{% url 'quiz:general-quiz' 3 %}`;
+
+            $(`#start-form-${quizIndex}`)[0].action = redirectURL;
+
+            $(`#subject-${quizIndex}`).val(subject);
+            $(`#language-${quizIndex}`).val(language);
+            $(`#voiceRecognition-${quizIndex}`).val(voiceRecognition);
+
+            $(`#start-form-${quizIndex}`).submit();
+        } else if (mode == "2" || mode == "4") {
+            if (mode === "2")
+                redirectURL = `{% url 'quiz:general-quiz' 2 %}`;
+            else if (mode === "4")
+                redirectURL = `{% url 'quiz:general-quiz' 4 %}`;
+
+            $(`#start-form-${quizIndex}`)[0].action = redirectURL;
+
+            $(`#subject-${quizIndex}`).val(subject);
+            $(`#language-${quizIndex}`).val(language);
+            $(`#voiceRecognition-${quizIndex}`).val(voiceRecognition);
+            $(`#start-modal-mode-text-${quizIndex}`).text(mode);
+
+            $(`form.start-container-${quizIndex}`).show();
+
+            if (quizIndex == 1) {
+                modalOpener1.click();
+            } else if (quizIndex == 2) {
+                modalOpener2.click();
+            }
+  
+            $(`input[id='start-${quizIndex}']`).focus();
+        }
+    })
+</script>
+
+
+
+
+<!-- REPEAT QUIZZES -->
+
+<section class="card mt-4 mb-4" id="repeat-quizzes">
+    {% csrf_token %}
+    <div class="card-header">
+        <h3>Repeat Quizzes {% if not request.user.subscription.subscription.is_premium %}<span class="ml-2"><i class="fa fa-star text-warning" data-toggle="tooltip" data-placement="bottom" title="Premium feature"></i></span>{% endif %}</h3>
+        <p class="m-0">Test yourself again on previously incorrectly answered or manually selected answers</p>
+    </div>
+    <div class="card-body">
+        {% if request.user.subscription.subscription.is_premium %}
+            <div class="repeat-quiz-contols">
+                <form action="" class="form">
+                    <div class="form-row mb-3">
+                        <div class="form-group col-md-6">
+                            <label for="" class="form-label mb-0">Language</label>
+                            <br>
+                            <small class="">Audio language in the quiz</small>
+                            <select class="custom-select" name="language" id="repeat-quiz-language-selector">
+                                <option selected value="slovak1">Slovak 1</option>
+                                <option value="slovak2">Slovak 2</option>
+                                <option value="czech2">Czech 1</option>
+                                <option value="czech2">Czech 2</option>
+                                <option value="english1">English 1</option>
+                                <option value="english2">English 2</option>
+                                <option value="no-audio">No Audio</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="" class="form-label mb-0">Voice Recognition</label>
+                            <br>
+                            <small class="">Enable/Disable voice recognition in the quiz</small>
+                            <select class="custom-select" name="voice_recognition" id="repeat-quiz-voice-recognition-selector">
+                                <option  value="1">Enable</option>
+                                <option selected value="0">Disable</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+
+
+
+
+            <div class="ex-panel-1">    
+                {% for quiz, color in repeat_quizzes %}
+                    <div class="card mb-4">
+                        <div class="card-header d-flex w-100 justify-content-between align-items-center">
+                            <h6><i class="fa fa-circle mr-2" aria-hidden="true" style="color: {{ color.0 }} !important"></i><span>{{ quiz.name }}</span></h6>
+                                                    
+                            <div class="btn-group">
+                                <button class="btn btn-secondary" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} type="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#m-delete-modal-{{ quiz.slug }}">Delete Questions</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="btn-group w-100" id="quiz-buttons">
+                                <button type="button" class="btn btn-dark w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#m-view-modal-{{ quiz.slug }}" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">View</button>
+                                
+                                <form action="{% url 'quiz:repeat-quiz' quiz.slug 3 %}" method="post" class="m-0 w-100">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="language" class="repeat-quiz-language" value="slovak1">
+                                    <input type="hidden" name="voice_recognition" class="repeat-quiz-voice-recognition" value="0">
+                                    <button type="submit" class="btn btn-dark w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %}  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 3</button>
+                                </form>
+                            
+                                <button type="button" class="btn btn-dark w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#m-mode-4-repeat-quiz-modal-{{ quiz.slug }}"  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Mode 4</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal" id="m-mode-4-repeat-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-mode-4-repeat-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="m-mode-4-repeat-quiz-modal-{{ quiz.slug }}-label">Repeat Quiz Mode 4</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{% url 'quiz:repeat-quiz' quiz.slug 4 %}" method="post" class="text-left">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="language" class="repeat-quiz-language" value="slovak1">
+                                                    <input type="hidden" name="voice_recognition" class="repeat-quiz-voice-recognition" value="0">
+            
+                                                    <label for="start">Start</label>
+                                                    <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                        placeholder="Enter a start number">
+                                                    <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success">Start Mode 4</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal" id="m-delete-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="m-delete-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="m-delete-modal-{{ quiz.slug }}-label">Delete Repeat Quiz Questions</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure? This action can't be undone.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a href="{% url 'quiz:delete-repeat-quiz-questions' quiz.slug %}" class="btn btn-danger">Delete Questions</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal" id="m-view-modal-{{ quiz.slug }}" tabindex="-1" aria-labelledby="m-view-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="m-view-modal-{{ quiz.slug }}-label">{{ quiz.name }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table table-sm table-bordered table-hover text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Question</th>
+                                                        <th scope="col">Options</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for question in quiz.get_questions_sorted %}
+                                                            <tr>
+                                                                <td>{{ question.question }}</td>
+                                                                <!-- <td>{{ question.question|slice:":-1" }}</td> -->
+                                                                <td>
+                                                                    {% for option in question.get_options %}
+                                                                    <span class="badge badge-pill badge-light pl-2 pr-2 pt-1 pb-1 text-uppercase">{{ option.option }}</span>
+                                                                    {% endfor %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="align-middle text-center bg-light p-2">No repeat quizzes available</div>
+                {% endfor %}
+            </div>
+            
+            
+            <div class="ex-panel-2">    
+                <div class="table-responsive rounded ">
+                    <table class="table table-hover text-center rounded mb-0" id="repeat-quizzes-table">
+                        <!-- <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap">#</th>
+                                <th scope="col" class="text-nowrap">Name</th>
+                                <th scope="col" class="text-nowrap">Type</th>
+                                <th scope="col" class="text-nowrap">Actions</th>
+                            </tr>
+                        </thead> -->
+                        <tbody>
+                            {% for quiz, color in repeat_quizzes %}
+                            <tr class="text-center border" id="saved-quiz-{{ quiz.slug }}">
+                                <td class="align-middle"><i class="fa fa-circle" aria-hidden="true" style="color: {{ color.0 }} !important"></i></td>
+                                <!-- <td class="align-middle">{{ forloop.counter }}</td> -->
+                                <td class="align-middle text-nowrap w-100">{{ quiz.name }}</td>
+                                <!-- <td class="align-middle w-100">{{ quiz.get_quiz_type_display }}</td> -->
+                                <td class="align-middle">
+                                    <div class="d-flex">
+                                        <button type="button" class="mr-2 btn btn-dark text-nowrap w-100" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#view-modal-{{ quiz.slug }}"  style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">View Saved Questions/Options</button>
+            
+                                        <form action="{% url 'quiz:repeat-quiz' quiz.slug 3 %}" method="post" class="m-0 mr-2">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="language" class="repeat-quiz-language" value="slovak1">
+                                            <input type="hidden" name="voice_recognition" class="repeat-quiz-voice-recognition" value="0">
+                                            <button type="submit" class="btn btn-dark text-nowrap" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 3</button>
+                                        </form>
+            
+                                        <button type="button" class="mr-2 btn btn-dark text-nowrap" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} data-toggle="modal" data-target="#mode-4-repeat-quiz-modal-{{ quiz.slug }}" style="background-color: {{ color.0 }} !important; color: {{ color.1 }} !important;">Start Mode 4</button>
+                                    </div>
+                                    <div class="modal" id="view-modal-{{ quiz.slug }}" tabindex="-1" aria-labelledby="view-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="view-modal-{{ quiz.slug }}-label">{{ quiz.name }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table class="table table-sm table-bordered table-hover text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Question</th>
+                                                                <th scope="col">Options</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for question in quiz.get_questions_sorted %}
+                                                                <tr>
+                                                                    <td>{{ question.question }}</td>
+                                                                    <!-- <td>{{ question.question|slice:":-1" }}</td> -->
+                                                                    <td>
+                                                                        {% for option in question.get_options %}
+                                                                        <span class="badge badge-pill badge-light pl-2 pr-2 pt-1 pb-1 text-uppercase">{{ option.option }}</span>
+                                                                        {% endfor %}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal" id="mode-4-repeat-quiz-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="mode-4-repeat-quiz-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="mode-4-repeat-quiz-modal-{{ quiz.slug }}-label">Repeat Quiz Mode 4</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{% url 'quiz:repeat-quiz' quiz.slug 4 %}" method="post" class="text-left">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <input type="hidden" name="language" class="repeat-quiz-language" value="slovak1">
+                                                            <input type="hidden" name="voice_recognition" class="repeat-quiz-voice-recognition" value="0">
+            
+                                                            <label for="start">Start</label>
+                                                            <input type="number" class="form-control" min="1" name="start" id="start" aria-describedby="startHelp"
+                                                                placeholder="Enter a start number">
+                                                            <small id="startHelp" class="form-text text-muted">For Mode 2 and Mode 4 only</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-success">Start Mode 4</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary" {% if not request.user.subscription.subscription.is_premium %}disabled{% endif %} type="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+                                        <div class="dropdown-menu">
+                                            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#delete-modal-{{ quiz.slug }}">Delete Questions</button>
+                                        </div>
+                                    </div>
+                                    <div class="modal  " id="delete-modal-{{ quiz.slug }}" tabindex="-1" role="dialog" aria-labelledby="delete-modal-{{ quiz.slug }}-label" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="delete-modal-{{ quiz.slug }}-label">Delete Repeat Quiz Questions</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure? This action can't be undone.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <a href="{% url 'quiz:delete-repeat-quiz-questions' quiz.slug %}" class="btn btn-danger">Delete Questions</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="align-middle text-center bg-light" colspan="9">No repeat quizzes available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="alert alert-primary mb-0 text-center" role="alert">This section is reserved for Premium users only.</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'utils.js' %}"></script>
+<script>
+    const rqlSelector = document.getElementById("repeat-quiz-language-selector");
+    const rqvrSelector = document.getElementById("repeat-quiz-voice-recognition-selector");
+
+    rqlSelector.onchange = () => {
+        document.querySelectorAll(".repeat-quiz-language").forEach(item => item.value = rqlSelector.value);
+    }
+
+    rqvrSelector.onchange = () => {
+        document.querySelectorAll(".repeat-quiz-voice-recognition").forEach(item => item.value = rqvrSelector.value);
+    }
+</script>
+{% endblock %}
+
+
+
+<input type="hidden" name="language" class="repeat-quiz-language"">
+<input type="hidden" name="voice_recognition" class="repeat-quiz-voice-recognition"">

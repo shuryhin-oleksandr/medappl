@@ -1,0 +1,120 @@
+{% load static %}
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161949813-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-161949813-2');
+    </script>
+
+    <title>{% block title %}Medappl.com - online testovanie a príprava na prijímacie skúšky LFUK{% endblock %}</title>
+    <meta name="description"
+        content="Aplikácia na online testovanie a efektívnu prípravu na prijímacie skúšky na medicínu LFUK Bratislava 2020, lekárska fakulta, príprava, biológia, chémia">
+    <meta name="keywords"
+        content="prijímačky, LFUK, príprava, testovanie, aplikácia, testy, medicína, skúšky, otestuj sa, biológia, chémia, doučovanie, Bratislava">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+        integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+    {% block head %}
+    {% endblock head %}
+</head>
+
+<body class="container">
+    {% if messages %}
+    <div class="position-fixed" id="messages">
+        {% for message in messages %}
+        {% if message.tags in 'danger,info,success,warning' %}
+            <div class="alert alert-{{ message.tags }} mb-2 alert-dismissible   show" role="alert">
+                <p class="mb-0">{{ message }}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% else %}
+            <div class="alert alert-light mb-2 alert-dismissible   show" role="alert">
+                <p class="mb-0">{{ message }}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="navbar">
+        <a class="navbar-brand" href="/">Medappl</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 justify-content-end">
+                <li class="nav-item mr-2 {% if request.path == '/' %}active{% endif %}">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item mr-2 {% if '/exam-creator' in request.path %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'quiz:exam-creator' %}">My Exams</a>
+                </li>
+                <li class="nav-item mr-2 {% if '/lfuk' in request.path %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'quiz:lfuk' %}">Sample Exams</a>
+                </li>
+                <li class="nav-item mr-2 {% if '/contact' in request.path %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'quiz:contact' %}">Contact</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link btn btn-sm btn-success dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if request.user.subscription.subscription.is_premium %}
+                            <span class="text-warning">{{ request.user.username }}</span>
+                            {% else %}
+                            <span>{{ request.user.username }}</span>
+                            {% endif %}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                        </div>
+                    </li> -->
+                    <li class="nav-item mr-2">
+                        <a class="nav-link btn btn-secondary btn-sm" href="{% url 'logout' %}">Sign Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item mr-2 btn-group">
+                        <a class="nav-link btn btn-secondary btn-sm" href="{% url 'login' %}">Sign In</a>
+                        <a class="nav-link btn btn-secondary btn-sm" href="{% url 'register' %}">Sign Up</a>
+                    </li>
+                    <li class="nav-item">
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="mb-5 pt-3 pb-3" id="navbar-margin"></div>
+    {% block content %}
+    {% endblock content %}
+</body>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+    $('.alert').alert();
+</script>
+{% block scripts %}
+{% endblock %}
+<html>
